@@ -122,12 +122,14 @@ export default {
 //发布动态
 .two {
   height: 80vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
   background: #fff;
   textarea {
     width: 95%;
+    height: 200px;
     margin: 0 auto;
     padding: 10px;
     color: #333333;
@@ -137,14 +139,15 @@ export default {
     border-right: none;
     border-bottom: solid #ccc 1px;
     resize: none;
-  }
-  .btn-send {
-    margin: 22px;
-    display: block;
-    width: 100%;
+    box-sizing: border-box;
   }
   .btn-wrapper {
-    display: flex;
+    width: 90%;
+    box-sizing: border-box;
+    .btn-send {
+      width: 100%;
+      display: block;
+    }
   }
   .mint-cell {
     border: none;

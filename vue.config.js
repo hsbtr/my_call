@@ -6,6 +6,7 @@ module.exports = {
     hot: true,
     open: true,
     compress: true,
+    https: true,
     proxy: {
       "/api": {
         target: "http://192.168.5.179:3030",

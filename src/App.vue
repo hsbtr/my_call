@@ -98,12 +98,15 @@ export default {
   height: 100vh;
   background: #fff;
   // 动画
+  //开始状态
   .test-left-enter {
     transform: translate(-100vw, 0);
   }
+  // 结束
   .test-left-leave-to {
     transform: translate(100vw, 0);
   }
+  // 生效过渡
   .test-left-enter-active,
   .test-left-leave-active {
     transition: all ease-in 0.3s;

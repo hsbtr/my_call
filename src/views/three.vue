@@ -36,6 +36,7 @@ export default {
 <style scoped lang="scss">
 .three {
   height: 80vh;
+  overflow: hidden;
   background: #333333;
   button {
     width: 100px;

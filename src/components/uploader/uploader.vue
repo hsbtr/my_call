@@ -16,13 +16,12 @@
             class="img-wrapper"
           >
             <img :src="item.src" itemprop="thumbnail" alt="" />
-            <!-- <div :style="{background:'url('+item.src+')  no-repeat',  backgroundPosition:'center center',backgroundSize:'cover'}" style="width:100%;height:110px;" itemprop="thumbnail"></div> -->
           </a>
-          <span class="file-remove" @click="remove(index, $event)">×</span>
+          <span class="file-remove" @click="remove(index, $event)"></span>
         </figure>
         <section class="thumbnail" v-if="this.files.length < 9">
           <div class="add">
-            <span>+</span>
+            <img src="../../../public/img/add.png" alt="" />
             <input
               type="file"
               @change="selectImgs()"
@@ -123,6 +122,13 @@ export default {
         };
         //将图片文件转成Base64
         let reader = new FileReader();
+        reader.onload = ev => {
+          console.log(ev);
+          this.getBase64().then(url => {
+            this.$set(fileItem, "src", url);
+          });
+        };
+        // 读取完成触发 不论成功与否
         reader.onloadend = e => {
           //压缩图片并存到fileItem中
           this.getBase64(e.target.result).then(url => {
@@ -140,16 +146,14 @@ export default {
           this.files.push(fileItem);
         }
       }
-      setTimeout(() => {
-        this.$emit("getFiles", tempList);
-      }, 300);
+      console.log(tempList);
       this.files.splice(9);
     },
     // 图片压缩并保存到files
     getBase64(url) {
       // let self = this;
-      let Img = new Image(),
-        dataURL = "";
+      let Img = new Image();
+      let dataURL = "";
       Img.src = url;
       // eslint-disable-next-line no-unused-vars
       return new Promise(function(resolve, reject) {
@@ -362,55 +366,83 @@ export default {
 
 <style scoped lang="scss">
 #imgUploader {
-  flex: 1;
-  margin-top: auto;
-  padding-left: 10px;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  // 内层
   .file-list {
     padding: 10px 0;
-    &::after {
-      content: "";
-      display: block;
-      clear: both;
-      visibility: hidden;
-      line-height: 0;
-      height: 0;
-      font-size: 0;
-    }
     .file-remove {
+      width: 20px;
+      height: 20px;
       position: absolute;
-      font-size: 12px;
-      right: 5px;
+      right: 3px;
       top: 1px;
-      width: 14px;
-      height: 14px;
       color: white;
       cursor: pointer;
-      line-height: 12px;
-      background: rgba(0, 0, 0, 0.25);
+      background: url("../../../public/img/remove.png") no-repeat 0 0/ 100% 100%;
       z-index: 1000;
     }
-
-    &:hover .file-remove {
-      display: inline;
+    // 图片展示区
+    .thumbnails {
+      width: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      // 选择预览共类
+      .thumbnail {
+        width: 23.4%;
+        height: 130px;
+        position: relative;
+        margin: 0 5px 10px 5px;
+        box-sizing: border-box;
+        // 预览图
+        .img-wrapper {
+          height: 130px;
+          position: relative;
+          display: flex;
+          img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+      }
+      // 选择按钮
+      .add {
+        width: 100%;
+        height: 130px;
+        cursor: pointer;
+        color: #999;
+        position: relative;
+        border: solid #ccc 1px;
+        img {
+          width: 60%;
+          height: 60%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        input[type="file"] {
+          width: 100%;
+          height: 110px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+        }
+        .fa {
+          font-size: 1.4em;
+          color: #7dd2d9;
+        }
+      }
     }
-  }
-}
-.add {
-  width: 100%;
-  height: 110px;
-  float: left;
-  text-align: center;
-  line-height: 110px;
-  // font-size: 1.4rem;
-  font-weight: 100;
-  cursor: pointer;
-  border: solid #ccc 1px;
-  color: #999;
-  position: relative;
-  // background: #f2f2f2;
-  .fa {
-    font-size: 1.4em;
-    color: #7dd2d9;
   }
 }
 .uploadBtn {
@@ -423,46 +455,5 @@ export default {
     color: #fff;
     padding: 0.2em 1em;
   }
-}
-
-.thumbnails {
-  width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  .thumbnail {
-    width: 20%;
-    height: 110px;
-    position: relative;
-    margin: 0 0 10px 0;
-    padding-right: 5px;
-    box-sizing: border-box;
-    // &:nth-child(3n){
-    //   padding-right: 0;
-    // }
-    .img-wrapper {
-      position: relative;
-      display: flex;
-      height: 110px;
-      img {
-        height: auto;
-        width: 100%;
-        max-width: 100%;
-        max-height: 100%;
-      }
-    }
-  }
-}
-input[type="file"] {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 110px;
-  opacity: 0;
 }
 </style>
